@@ -8,6 +8,11 @@ class TestHandler(TestCase):
         with self.assertRaises(Exception):
             some_function(Exception)
 
+    def test_function_handler_with_args(self):
+        self.assertTrue(many_args_function(KeyError, 'arg2', kwarg1='kwarg1'))
+        with self.assertRaises(Exception):
+            many_args_function(Exception)
+
     def test_method_handler(self):
         obj = SomeClass()
         self.assertTrue(obj.some_method(KeyError))
@@ -34,6 +39,15 @@ def function_handler(exception, e):
 
 @redirect_exceptions(function_handler, KeyError)
 def some_function(exception):
+    raise exception
+
+
+def any_args_handler(*args, e, **kwargs):
+    return True
+
+
+@redirect_exceptions(any_args_handler, KeyError)
+def many_args_function(exception, arg2, kwarg1=None):
     raise exception
 
 
